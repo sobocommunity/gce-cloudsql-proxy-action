@@ -6,20 +6,24 @@ branding:
   color: 'red'
 
 inputs:
-  creds:
-    description: 'Contents of a short-lived GOOGLE_APPLICATION_CREDENTIALS environment variable'
-    required: false
   instance:
     description: 'CloudSQL instance'
     required: true
+    type: string
   port:
     description: 'Listen on port'
     required: false
     default: 5432
-  proxy_version:
+    type: number
+  proxy-version:
     description: 'CloudSQL Proxy Version'
     required: false
-    default: v1.29.0
+    default: v2.3.0
+    type: string
+  extra-args:
+    description: 'Extra CloudSQL Proxy arguments'
+    required: false
+    type: string
 
 runs:
   using: 'composite'
@@ -28,11 +32,11 @@ runs:
       shell: bash
       run: |
         # Download Linux binary
-        wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy        
-        chmod +x cloud_sql_proxy
+        wget https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/${{ inputs.proxy-version }}/cloud-sql-proxy.linux.amd64 -O cloud-sql-proxy        
+        chmod +x cloud-sql-proxy
 
         # Start Cloud SQL Proxy
-        ./cloud_sql_proxy -instances=${{ inputs.instance }}=tcp:127.0.0.1:${{ inputs.port }} ${{ inputs.extra-args }} &
+        ./cloud-sql-proxy --port ${{ inputs.port }} ${{ inputs.extra-args }} {{ inputs.instance }} &
 
         # wait until connections are accepted
         sleep 3
