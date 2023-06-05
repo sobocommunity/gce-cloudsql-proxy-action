@@ -32,7 +32,7 @@ runs:
         chmod +x cloud_sql_proxy
 
         # Start Cloud SQL Proxy
-        ./cloud_sql_proxy -instances=${{ inputs.instance }}=tcp:127.0.0.1:${{ inputs.port }} &
+        ./cloud_sql_proxy -instances=${{ inputs.instance }}=tcp:127.0.0.1:${{ inputs.port }} ${{ inputs.extra-args }} &
 
         # wait until connections are accepted
         sleep 3
