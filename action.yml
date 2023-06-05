@@ -36,7 +36,7 @@ runs:
         chmod +x cloud-sql-proxy
 
         # Start Cloud SQL Proxy
-        ./cloud-sql-proxy --port ${{ inputs.port }} ${{ inputs.extra-args }} {{ inputs.instance }} &
+        ./cloud-sql-proxy --port ${{ inputs.port }} ${{ inputs.extra-args }} ${{ inputs.instance }} &
 
         # wait until connections are accepted
         sleep 3
